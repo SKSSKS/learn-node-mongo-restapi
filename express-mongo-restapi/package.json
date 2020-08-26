@@ -1,7 +1,7 @@
 {
-  "name": "natours",
+  "name": "rest-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "lear rest api, express and mongo",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
