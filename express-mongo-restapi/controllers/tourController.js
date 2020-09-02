@@ -3,6 +3,33 @@ const fs = require('fs');
 const toursFile = fs.readFileSync('./dev-data/data/tours-simple.json', 'utf-8');
 const toursData = JSON.parse(toursFile);
 
+
+// param middleware handler function, to handle any id check, which we are doing in the handler fun.
+const checkId = (req, res, next, value) => {
+  if(!value || (+value >= toursData.length)) {
+    return res.status(404).json({ // return must required
+      statusCode: 404,
+      status: 'Error',
+      message: `There is no tour with id: ${value}`
+    })
+  }
+
+  next()
+}
+
+const checkBodyMiddleware = (req, res, next) => {
+  const { name, duration, difficulty, price } = req.body
+
+  if(!name || !duration || !difficulty || !price) {
+    return res.status(404).json({
+      statusCode: 404,
+      status: 'Error',
+      message: `Please define {name:${name}, duration:${duration}, price:${price} and difficulty:${difficulty}} property properly`
+    })
+  }
+  next()
+}
+
 const getAllTours = (req, res) => {
   const { requestTime } = req;
   return res.status(200).json({
@@ -56,36 +83,24 @@ const updateTour = (req, res) => {
       return tour;
     }
   });
-  if (updatedTour.length) {
-    res.status(200).json({
-      status: 'Success',
-      statusCode: 200,
-      data: {
-        tour: updatedTour,
-      },
-    });
-  } else {
-    res.status(404).json({
-      error: `There is no tour with this id: ${id}`,
-    });
-  }
+
+  res.status(200).json({
+    status: 'Success',
+    statusCode: 200,
+    data: {
+      tour: updatedTour,
+    },
+  });
 };
 
 const deleteTour = (req, res) => {
   const { id } = req.params;
   const deletedTour = toursData.filter((tour) => +id === tour.id);
-
-  if (deletedTour.length) {
-    res.status(204).json({
-      status: 'Success',
-      statusCode: 204,
-      data: null, //{tour: deletedTour}
-    });
-  } else {
-    res.status(404).json({
-      error: `There is no tour with this id: ${id}`,
-    });
-  }
+  res.status(204).json({
+    status: 'Success',
+    statusCode: 204,
+    data: null, //{tour: deletedTour}
+  });
 };
 
 module.exports = {
@@ -93,5 +108,7 @@ module.exports = {
     createTour,
     getTour,
     updateTour,
-    deleteTour
+    deleteTour,
+    checkId,
+    checkBodyMiddleware
 }

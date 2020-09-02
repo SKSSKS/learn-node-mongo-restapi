@@ -9,8 +9,15 @@ const app = express();
 /*                                 MIDDLEWARE                                 */
 /* -------------------------------------------------------------------------- */
 // 1st MIIDLEWARE
-app.use(morgan('dev'));
+
+if(process.env.NODE_ENV==='development') {
+  app.use(morgan('dev'));
+}
+
 app.use(express.json()); // to put body in to req
+
+// middleware to serve static file
+app.use(express.static(`${__dirname}/public`))
 
 /* -------------------------------------------------------------------------- */
 /*                                     ROUTES                                 */
