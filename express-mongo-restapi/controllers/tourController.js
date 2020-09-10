@@ -3,32 +3,32 @@ const fs = require('fs');
 const toursFile = fs.readFileSync('./dev-data/data/tours-simple.json', 'utf-8');
 const toursData = JSON.parse(toursFile);
 
-
 // param middleware handler function, to handle any id check, which we are doing in the handler fun.
 const checkId = (req, res, next, value) => {
-  if(!value || (+value >= toursData.length)) {
-    return res.status(404).json({ // return must required
+  if (!value || +value >= toursData.length) {
+    return res.status(404).json({
+      // return must required
       statusCode: 404,
       status: 'Error',
-      message: `There is no tour with id: ${value}`
-    })
+      message: `There is no tour with id: ${value}`,
+    });
   }
 
-  next()
-}
+  next();
+};
 
 const checkBodyMiddleware = (req, res, next) => {
-  const { name, duration, difficulty, price } = req.body
+  const { name, duration, difficulty, price } = req.body;
 
-  if(!name || !duration || !difficulty || !price) {
+  if (!name || !duration || !difficulty || !price) {
     return res.status(404).json({
       statusCode: 404,
       status: 'Error',
-      message: `Please define {name:${name}, duration:${duration}, price:${price} and difficulty:${difficulty}} property properly`
-    })
+      message: `Please define {name:${name}, duration:${duration}, price:${price} and difficulty:${difficulty}} property properly`,
+    });
   }
-  next()
-}
+  next();
+};
 
 const getAllTours = (req, res) => {
   const { requestTime } = req;
@@ -104,11 +104,11 @@ const deleteTour = (req, res) => {
 };
 
 module.exports = {
-    getAllTours,
-    createTour,
-    getTour,
-    updateTour,
-    deleteTour,
-    checkId,
-    checkBodyMiddleware
-}
+  getAllTours,
+  createTour,
+  getTour,
+  updateTour,
+  deleteTour,
+  checkId,
+  checkBodyMiddleware,
+};
