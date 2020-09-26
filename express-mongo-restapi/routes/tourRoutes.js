@@ -8,8 +8,9 @@ const {
   getTour,
   updateTour,
   deleteTour,
-  checkId,
-  checkBodyMiddleware
+  // checkId,
+  checkBodyMiddleware,
+  aliasTop5CheapTours 
 } = require('../controllers/tourController');
 
 // router.param('id', (req, res, next, val) => {
@@ -18,9 +19,10 @@ const {
 // })
 
 // params middleware
-router.param('id', checkId);
+// router.param('id', checkId);
 
-router.route('/').get(getAllTours).post( checkBodyMiddleware ,createTour);
+router.route('/top-5-cheap').get( aliasTop5CheapTours , getAllTours)
+router.route('/').get(getAllTours).post(checkBodyMiddleware, createTour);
 router.route('/:id').get(getTour).patch(updateTour).delete(deleteTour);
 
 module.exports = {
